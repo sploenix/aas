@@ -1,0 +1,7 @@
+bridge-utils
+ebtables
+graphviz
+libvirt
+qemu
+qemu-arch-extra
+virt-manager

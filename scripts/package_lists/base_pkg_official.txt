@@ -1,0 +1,13 @@
+autofs
+base-devel
+bash-completion
+libcdr
+libgtop
+mc
+p7zip
+reflector
+rsync
+syncthing
+unp
+unrar
+wget

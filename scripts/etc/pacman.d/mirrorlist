@@ -1,0 +1,22 @@
+Server = https://arch.32g.eu/$repo/os/$arch
+Server = https://mirror.aardvark.it/archlinux/$repo/os/$arch
+Server = https://archlinux.cyborg-connect.de/$repo/os/$arch
+Server = https://mirror.f4st.host/archlinux/$repo/os/$arch
+Server = https://ftp.fau.de/archlinux/$repo/os/$arch
+Server = https://mirror.flipez.de/archlinux/$repo/os/$arch
+Server = https://mirror.fluxent.de/archlinux/$repo/os/$arch
+Server = https://mirror.hactar.bz/$repo/os/$arch
+Server = https://archlinux.honkgong.info/$repo/os/$arch
+Server = https://arch.jensgutermuth.de/$repo/os/$arch
+Server = https://mirror.js-webcoding.de/pub/archlinux/$repo/os/$arch
+Server = https://k42.ch/mirror/archlinux/$repo/os/$arch
+Server = https://mirror.metalgamer.eu/archlinux/$repo/os/$arch
+Server = https://archlinux.my-universe.com/$repo/os/$arch
+Server = https://mirror.netcologne.de/archlinux/$repo/os/$arch
+Server = https://mirrors.niyawe.de/archlinux/$repo/os/$arch
+Server = https://mirror.pseudoform.org/$repo/os/$arch
+Server = https://ftp.tuxdroid.org/archlinux/$repo/os/$arch
+Server = https://mirror.ubrco.de/archlinux/$repo/os/$arch
+Server = https://arch.packages.zachlge.org/$repo/os/$arch
+
+
