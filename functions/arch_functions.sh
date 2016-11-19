@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # load bash color definitions
-source $BASEDIR/functions/sys_functions.sh
+source $FunctionsDir/sys_functions.sh
 
 function checkIsArch() {
 	[ -f "/etc/arch-release" ]

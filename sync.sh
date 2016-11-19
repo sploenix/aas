@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # path where this script is stored
-SPATH=`dirname $0`
-[ "$SPATH" = "." ] && SPATH=`pwd`
-BASEDIR=$SPATH
+[ "`dirname $0`" = "." ] && export BaseDir=`pwd` || export BaseDir=`dirname $0`
+
+export ScriptDir=`readlink -m $BaseDir/scripts`
+export FunctionsDir=`readlink -m $BaseDir/functions`
 
 # Store PID - kill script from within functions
 # ...but only if this script is not called from another script
@@ -15,7 +16,7 @@ fi
 ## load color definitions
 #source $SPATH/scripts/functions/color_definitions.sh
 # load system functions
-source $SPATH/functions/sys_functions.sh
+source $FunctionsDir/sys_functions.sh
 
 requireNonRoot
 

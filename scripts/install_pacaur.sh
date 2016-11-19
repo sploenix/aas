@@ -6,11 +6,11 @@
 # path where this script is stored
 
 # path where this script is stored
-[ "`dirname $0`" = "." ] && SCRIPTPATH=`pwd` || SCRIPTPATH=`dirname $0`
-BASEDIR=`readlink -m $SCRIPTPATH/../`
+[ "`dirname $0`" = "." ] && ScriptDir=`pwd` || ScriptDir=`dirname $0`
+BaseDir=`readlink -m $ScriptDir/../`
 
 # load system functions
-source $BASEDIR/functions/arch_functions.sh
+source $BaseDir/functions/arch_functions.sh
 
 requireNonRoot
 

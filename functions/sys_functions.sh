@@ -8,7 +8,7 @@
 }
 
 # load bash color definitions
-source $BASEDIR/functions/bash_color_definitions.sh
+source $BaseDir/functions/bash_color_definitions.sh
 
 # bash implementation of GOTO
 function jumpto {
@@ -171,4 +171,3 @@ function requireRoot() {
 function requireNonRoot() {
   [ "`whoami`" = 'root' ] && error "This Script must not be run as root!"
 }
-

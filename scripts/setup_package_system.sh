@@ -1,14 +1,29 @@
 #!/bin/bash
 
-# path where this script is stored
-[ "`dirname $0`" = "." ] && SCRIPTPATH=`pwd` || SCRIPTPATH=`dirname $0`
-BASEDIR=`readlink -m $SCRIPTPATH/../`
-
-# load system functions
-source $BASEDIR/functions/arch_functions.sh
+# load arch specific functions
+source $FunctionsDir/arch_functions.sh
 
 # script must be run as root
 requireNonRoot
+
+SysConfDir=/etc/aas
+AasPkgConfDir=$SysConfDir/packageConfiguration
+
+# create AAS package configuration directory
+[ ! -d $AasPkgConfDir ] && {
+	sysMessage "Creating directory $AasPkgConfDir"
+	sudo mkdir $AasPkgConfDir
+	[ ! -d $AasPkgConfDir ] && {
+		error "Could not create directory $AasPkgConfDir"
+		exit 1
+	}
+}
+
+# copy base package setup
+for file in `ls $BaseDir/samplePackageConfigurations`
+do
+	[ ! -f $AasPkgConfDir/$file ] && sudo cp $BaseDir/samplePackageConfigurations/$file $AasPkgConfDir
+done
 
 # handle script parameters
 for (( i=1; i<=$#; i++))
@@ -46,7 +61,7 @@ fileIsRecent /etc/pacman.d/mirrorlist && {
 }
 
 # verify that pacaur is installed
-! pkgIsInstalled pacaur && $SPATH/install_pacaur.sh
+! pkgIsInstalled pacaur && $ScriptDir/install_pacaur.sh
 
 # only run if updates are pending
 [ -n "`checkupdates`" ] && {
@@ -60,7 +75,7 @@ fileIsRecent /etc/pacman.d/mirrorlist && {
 	sysMessage "Getting new package lists and upgrading system..."
 	sudo pacman -Syu --noconfirm --color always
 
-	[ "$UPDATE_GRUB" ] && $SPATH/setup_grub.sh
+	[ "$UPDATE_GRUB" ] && $ScriptDir/setup_grub.sh
 }
 
 # check if package checkupdates-aur is installed
@@ -88,17 +103,17 @@ fileIsRecent /etc/pacman.d/mirrorlist && {
 
 # install missing packages from official repositories
 sysMessage "Installing missing packages from official repositories..."
-archInstallAsNeeded $SPATH/package_lists/base_pkg_official.txt
+archInstallAsNeeded $AasPkgConfDir/base_pkg_official.txt
 
 # install missing packages from AUR
-[ -n "`cat $SPATH/package_lists/base_pkg_aur.txt`" ] && {
+[ -n "`cat $AasPkgConfDir/base_pkg_aur.txt`" ] && {
 	sysMessage "Compiling missing packages from AUR..."
-	! archInstallAsNeeded $SPATH/package_lists/base_pkg_aur.txt && error "MIST"
+	! archInstallAsNeeded $AasPkgConfDir/base_pkg_aur.txt && error "MIST"
 }
 
 [ ! "$NOX" ] && {
 	sysMessage "Installing missing packages for GNOME environment..."
-	archInstallAsNeeded $SPATH/package_lists/gnome_environment.txt
+	archInstallAsNeeded $AasPkgConfDir/gnome_environment.txt
 }
 
 # reload systemd scripts
@@ -108,3 +123,5 @@ sudo systemctl daemon-reload
 # update spamassassin rules
 sysMessage "Updating Spamassassin rules..."
 sudo sa-update
+
+exit 0

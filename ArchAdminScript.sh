@@ -1,14 +1,33 @@
 #!/bin/bash
 
 # path where this script is stored
-[ "`dirname $0`" = "." ] && SCRIPTPATH=`pwd` || SCRIPTPATH=`dirname $0`
-BASEDIR=`readlink -m $SCRIPTPATH/../`
+[ "`dirname $0`" = "." ] && export BaseDir=`pwd` || export BaseDir=`dirname $0`
+
+export ScriptDir=`readlink -m $BaseDir/scripts`
+export FunctionsDir=`readlink -m $BaseDir/functions`
 
 # load system functions
-source $BASEDIR/functions/arch_functions.sh
+source $FunctionsDir/arch_functions.sh
+
+SysConfDir=/etc/aas
+CustomScriptDir=$SysConfDir/custom
 
 requireNonRoot
 requireIsArch
+
+# create global configuration directory
+[ ! -d $SysConfDir ] && {
+	sysMessage "Creating directory $SysConfDir"
+	sudo mkdir $SysConfDir
+	[ ! -d $SysConfDir ] && error "Could not create directory $SysConfDir"
+}
+
+# create custom scripts directory
+[ ! -d $CustomScriptDir ] && {
+	sysMessage "Creating directory $CustomScriptDir"
+	sudo mkdir $CustomScriptDir
+	[ ! -d $CustomScriptDir ] && error "Could not create directory $CustomScriptDir"
+}
 
 # handle script parameters
 for (( i=1; i<=$#; i++))
@@ -49,12 +68,12 @@ done
 
 [ ! "$NOX" ] && {
 	# call script to setup package system
-	$SCRIPTPATH/setup_package_system.sh
+	! $ScriptDir/setup_package_system.sh && error "ERROR"
 
 	# Setup printing system
 	! systemdIsRunning org.cups.cupsd && {
 		sysMessage "Installing and enabling printing system..."
-		$SCRIPTPATH/setup_printing.sh
+		$ScriptDir/setup_printing.sh
 	}
 
 	# Enable GDM
@@ -62,7 +81,7 @@ done
 		sysMessage "Enabling autostart of GDM (Gnome Display Manager)..."
 		systemdEnable gdm
 	}
-} || $SCRIPTPATH/setup_package_system.sh --nox
+} || $ScriptDir/setup_package_system.sh --nox
 
 # Enable rc.local compatibility
 [ ! -f /etc/rc.local ] && {
@@ -72,9 +91,9 @@ done
 	sudo chmod +x /etc/rc.local
 }
 CFG=/etc/systemd/system/rc-local.service
-[[ ! -f $CFG || -n `diff $CFG $BASEDIR$CFG` ]] && {
+[[ ! -f $CFG || -n `diff $CFG $BaseDir$CFG` ]] && {
 	sysMessage "Creating/Updating systemd service file for rc.local compatibility..."
-	sudo cp -f $BASEDIR$CFG $CFG
+	sudo cp -f $BaseDir$CFG $CFG
 	sudo chmod +x $CFG
 	sudo systemctl daemon-reload
 }
@@ -88,5 +107,5 @@ exit
 
 [ -n "$TET" ] && {
 	sysMessage "Running TET script..."
-	$BASEDIR/TET/scripts/manage-system-tet.sh GO $TET_PARAMS
+	$BaseDir/TET/scripts/manage-system-tet.sh GO $TET_PARAMS
 }
