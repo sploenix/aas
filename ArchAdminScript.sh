@@ -3,30 +3,69 @@
 # path where this script is stored
 [ "`dirname $0`" = "." ] && export BaseDir=`pwd` || export BaseDir=`dirname $0`
 
+# variables that are needed in other scripts
 export ScriptDir=`readlink -m $BaseDir/scripts`
 export FunctionsDir=`readlink -m $BaseDir/functions`
+export SysConfDir=/etc/aas
+export SysConfFile=$SysConfDir/config
+
+CustomScriptDir=$SysConfDir/custom
 
 # load system functions
 source $FunctionsDir/arch_functions.sh
 
-SysConfDir=/etc/aas
-CustomScriptDir=$SysConfDir/custom
-
+# always run in user mode
 requireNonRoot
+# only run on arch based distributions
 requireIsArch
+
+##
+## add script to path
+##
+
+# create ~/.bashrc
+UserBashCfg=~/.bashrc
+[ ! -f $UserBashCfg ] && {
+	sysMessage -n "Creating file `readlink -m $UserBashCfg` ... "
+	touch $UserBashCfg
+	[ ! -f $UserBashCfg ] && error "Failed to create file `readlink -m $UserBashCfg`" || okMessage "OK"
+}
+
+# modify ~/.bashrc
+PathStr=~/.aas
+[ -z "`cat $UserBashCfg | grep PATH=`" ] && {
+	sysMessage -n "Adding PATH defintion to bash configuration file $UserBashCfg ... "
+	echo "PATH=\$PATH:$PathStr" > $UserBashCfg
+	[ -z "`cat $UserBashCfg | grep PATH`" ] && error "Failed" || okMessage "OK"
+} || {
+	[ -z "`cat $UserBashCfg | grep $PathStr`" ] && {
+		sysMessage -n "Adding $PathStr to user PATH ... "
+		OldPathStr=`cat $UserBashCfg | grep PATH=`
+		NewPathStr="$OldPathStr:$PathStr"
+		sed "s|$OldPathStr|$NewPathStr|g" -i $UserBashCfg
+		[ -z "`cat $UserBashCfg | grep $PathStr`" ] && error "Failed" || okMessage "OK"
+	}
+}
 
 # create global configuration directory
 [ ! -d $SysConfDir ] && {
-	sysMessage "Creating directory $SysConfDir"
+	sysMessage -n "Creating directory $SysConfDir ... "
 	sudo mkdir $SysConfDir
-	[ ! -d $SysConfDir ] && error "Could not create directory $SysConfDir"
+	[ ! -d $SysConfDir ] && error "Could not create directory $SysConfDir" || okMessage "OK"
+}
+
+# create global configuration file
+[ ! -f $SysConfFile ] && {
+	sysMessage -n "Creating file `readlink -m $SysConfFile` ... "
+	sudo touch $SysConfFile
+	[ ! -f $SysConfFile ] && error "Failed to create file `readlink -m $SysConfFile`" || okMessage "OK"
 }
 
 # create custom scripts directory
 [ ! -d $CustomScriptDir ] && {
-	sysMessage "Creating directory $CustomScriptDir"
+	sysMessage -n "Creating directory $CustomScriptDir ... "
 	sudo mkdir $CustomScriptDir
-	[ ! -d $CustomScriptDir ] && error "Could not create directory $CustomScriptDir"
+	[ ! -d $CustomScriptDir ] && error "Could not create directory $CustomScriptDir" || okMessage "OK"
 }
 
 # handle script parameters
@@ -73,7 +112,7 @@ done
 	# Setup printing system
 	! systemdIsRunning org.cups.cupsd && {
 		sysMessage "Installing and enabling printing system..."
-		$ScriptDir/setup_printing.sh
+		$ScriptDir/setupPrintingSystem.sh
 	}
 
 	# Enable GDM

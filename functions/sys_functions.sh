@@ -39,7 +39,7 @@ function sysMessage() {
 }
 
 function infoMessage() {
-	sysMessage $1 $2
+	[ -n "$2" ] && echo -e $1 "${MAIN_MSG_COLOR}$2${COff}" || echo -e "${MAIN_MSG_COLOR}$1${COff}"
 }
 
 function okMessage() {
