@@ -107,7 +107,7 @@ done
 
 [ ! "$NOX" ] && {
 	# call script to setup package system
-	! $ScriptDir/setup_package_system.sh && error "ERROR"
+	! $ScriptDir/setupPackages.sh && error "ERROR"
 
 	# Setup printing system
 	! systemdIsRunning org.cups.cupsd && {
@@ -120,7 +120,7 @@ done
 		sysMessage "Enabling autostart of GDM (Gnome Display Manager)..."
 		systemdEnable gdm
 	}
-} || $ScriptDir/setup_package_system.sh --nox
+} || $ScriptDir/setupPackages.sh --nox
 
 # Enable rc.local compatibility
 [ ! -f /etc/rc.local ] && {

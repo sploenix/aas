@@ -75,7 +75,7 @@ fileIsRecent /etc/pacman.d/mirrorlist && {
 	sysMessage "Getting new package lists and upgrading system..."
 	sudo pacman -Syu --noconfirm --color always
 
-	[ "$UPDATE_GRUB" ] && $ScriptDir/setup_grub.sh
+	[ "$UPDATE_GRUB" ] && $ScriptDir/setupGrub.sh
 }
 
 # check if package checkupdates-aur is installed
