@@ -3,7 +3,7 @@
 # load arch specific functions
 source $FunctionsDir/arch_functions.sh
 
-# script must be run as root
+# script must not be run as root
 requireNonRoot
 
 SysConfDir=/etc/aas
