@@ -1,13 +1,15 @@
 #!/bin/bash
 
 # path where this script is stored
-[ "`dirname $0`" = "." ] && SCRIPTPATH=`pwd` || SCRIPTPATH=`dirname $0`
-BASEDIR=`readlink -m $SCRIPTPATH/../`
+[ "`dirname $0`" = "." ] && export ScriptDir=`pwd` || export ScriptDir=`dirname $0`
+
+export BaseDir=`readlink -m $ScriptDir/../`
+export FunctionsDir=`readlink -m $BaseDir/functions`
 
 # load system functions
-source $BASEDIR/functions/arch_functions.sh
+source $FunctionsDir/arch_functions.sh
 
 requireNonRoot
 
 sysMessage "Installing latex environment..."
-archInstallAsNeeded `cat $BASEDIR/arch/package_lists/latex.txt`
+archInstallAsNeeded /etc/aas/packageConfiguration/latex.txt
