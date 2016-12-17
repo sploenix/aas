@@ -21,7 +21,7 @@ gst-plugins-good
 gst-plugins-ugly
 highlight
 https-everywhere-chrome
-keepassx-http
+keepassxc
 libreoffice-fresh
 libreoffice-fresh-de
 mesa-vdpau

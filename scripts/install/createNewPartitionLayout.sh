@@ -60,4 +60,4 @@ echo "Formatting root and set label to ARCH"
 mkfs.ext4 -L ARCH ${DEV}2
 
 echo "Formatting home and set label to HOME"
-mkfs.ext4 -L ARCH ${DEV}3
+mkfs.ext4 -L HOME ${DEV}3
