@@ -12,4 +12,4 @@ pacstrap /mnt base base-devel networkmanager openssh sudo vim git
 
 genfstab -L /mnt > /mnt/etc/fstab
 
-arch-chroot /mnt
+arch-chroot /mnt /bin/bash

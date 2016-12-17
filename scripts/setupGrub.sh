@@ -13,7 +13,7 @@ sudo mkinitcpio -p linux
 
 sysMessage "Setting up grub..."
 # install needed packages
-archInstallAsNeeded "grub os-prober efibootmgr"
+archInstallAsNeeded "grub os-prober efibootmgr dosfstools mtools"
 
 # generate grub configuration file
 sudo grub-mkconfig -o /boot/grub/grub.cfg
