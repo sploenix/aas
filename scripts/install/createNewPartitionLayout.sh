@@ -1,11 +1,24 @@
 #!/bin/bash
+#
+# Erase complete disk, create new partition layout and format new partitions
+#
+# Labels:
+# - /     : ARCH
+# - /home : HOME
+# - swap  : SWAP
 
 DISK=sda
 SWAP_SIZE=4G
+EFI_SIZE=512M
 ROOT_SIZE=30G
 
+# TODO: use EFI if possible
+[ -d /sys/firmware/efi ] && echo "System uses UEFI" || echo "System uses BIOS"
+
+# complete path to harddisk device
 DEV=/dev/$DISK
 
+# TODO: use parted instead of fdisk (gpt support, ease of use)
 echo -n "${DEV}: "
 echo `fdisk -l $DEV | grep 'Disk /dev' | awk '{print $3 $4}'`
 echo "Will delete all data on $DEV - press CTRL-C to exit or any other key to continue..."
@@ -16,8 +29,6 @@ echo "Creating new partition table on $DEV"
 	echo o # Create a new empty DOS partition table
 	echo w # Write changes
 ) | sudo fdisk $DEV
-
-echo -e "o\nw" | fdisk $DEV
 
 echo "Creating swap partition ${DEV}1"
 (

@@ -6,4 +6,4 @@ cd aas/scripts/install
 
 ./createNewPartitionLayout.sh
 
-./installBaseSystem.sh
+./installBaseSystem.sh /mnt
