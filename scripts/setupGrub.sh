@@ -1,17 +1,17 @@
 #!/bin/bash
 
 # path where this script is stored
-[ "`dirname $0`" = "." ] && SCRIPTPATH=`pwd` || SCRIPTPATH=`dirname $0`
-BASEDIR=`readlink -m $SCRIPTPATH/../`
+[ "`dirname $0`" = "." ] && ScriptDir=`pwd` || ScriptDir=`dirname $0`
+BaseDir=`readlink -m $ScriptDir/../`
 
 # load system functions
-source $BASEDIR/functions/arch_functions.sh
+source $BaseDir/functions/arch_functions.sh
 
 # generate kernel image
-sysMessage "Generating kernel boot image..."
+infoMessage "Generating kernel boot image..."
 sudo mkinitcpio -p linux
 
-sysMessage "Setting up grub..."
+infoMessage "Setting up grub..."
 # install needed packages
 archInstallAsNeeded "grub os-prober efibootmgr"
 

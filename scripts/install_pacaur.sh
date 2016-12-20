@@ -18,15 +18,15 @@ requireNonRoot
 [ -f "/usr/bin/pacaur" ] && exit 0
 
 # MAKE SURE OUR SHINY NEW ARCH IS UP-TO-DATE
-sysMessage "Checking for system updates..."
+infoMessage "Applying system updates..."
 sudo pacman -Syu --noconfirm
 
 # INSTALL dependencies for compiling packages
-sysMessage "Checking build environment..."
+infoMessage "Checking build environment..."
 archInstallAsNeeded "binutils gcc fakeroot make"
 
 # INSTALL DEPENDENCY "expac", "yajl" AND "git" FROM EXTRA
-sysMessage "Installing dependencies from repository EXTRA..."
+infoMessage "Installing dependencies from repository EXTRA..."
 archInstallAsNeeded  expac yajl git
 
 # INSTALL DEPENDENCY "cower" FROM AUR
