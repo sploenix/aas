@@ -113,6 +113,7 @@ archInstallAsNeeded $AasPkgConfDir/base_pkg_official.txt
 
 [ ! "$NOX" ] && {
 	sysMessage "Installing missing packages for GNOME environment..."
+	sudo pacman -S --needed --noconfirm gnome
 	archInstallAsNeeded $AasPkgConfDir/gnome_environment.txt
 }
 

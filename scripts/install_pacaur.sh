@@ -23,6 +23,7 @@ sudo pacman -Syu --noconfirm
 
 # INSTALL dependencies for compiling packages
 infoMessage "Checking build environment..."
+sudo pacman -S --needed --noconfirm base-devel
 archInstallAsNeeded "binutils gcc fakeroot make"
 
 # INSTALL DEPENDENCY "expac", "yajl" AND "git" FROM EXTRA
