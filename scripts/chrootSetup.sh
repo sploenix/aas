@@ -54,7 +54,7 @@ locale-gen
 $ScriptDir/setupGrub.sh
 
 echo "Configuring SSH"
-systemdctl enable sshd
+systemctl enable sshd
 if [ -z "`cat /etc/ssh/sshd_config | grep 'X11Forwarding yes'`" ]; then
 	echo -e "Enabling X11Forwarding"
 	echo 'X11Forwarding yes' >> /etc/ssh/sshd_config
@@ -65,6 +65,6 @@ if [ -z "`cat /etc/ssh/sshd_config | grep 'X11UseLocalhost no'`" ]; then
 fi
 
 echo "Enabling NetworkManager"
-systemdctl enable NetworkManager
+systemctl enable NetworkManager
 
 echo -e "\nIf you don't see any errors you can reboot the system and start your installed system"

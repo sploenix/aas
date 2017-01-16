@@ -3,6 +3,9 @@
 # path where this script is stored
 [ "`dirname $0`" = "." ] && export BaseDir=`pwd` || export BaseDir=`dirname $0`
 
+# self update of aas
+[ -n "`grep 'SELF_UPDATE=true' /etc/aas/config`" ] && $BaseDir/selfUpdate.sh
+
 # variables that are needed in other scripts
 export ScriptDir=`readlink -m $BaseDir/scripts`
 export FunctionsDir=`readlink -m $BaseDir/functions`

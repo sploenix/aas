@@ -3,7 +3,7 @@
 # load arch specific functions
 source $FunctionsDir/arch_functions.sh
 
-# script must be run as root
+# script must not be run as root
 requireNonRoot
 
 SysConfDir=/etc/aas
@@ -113,6 +113,7 @@ archInstallAsNeeded $AasPkgConfDir/base_pkg_official.txt
 
 [ ! "$NOX" ] && {
 	sysMessage "Installing missing packages for GNOME environment..."
+	sudo pacman -S --needed --noconfirm gnome
 	archInstallAsNeeded $AasPkgConfDir/gnome_environment.txt
 }
 
