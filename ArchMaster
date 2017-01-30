@@ -22,54 +22,8 @@ requireNonRoot
 # only run on arch based distributions
 requireIsArch
 
-##
-## add script to path
-##
-
-# create ~/.bashrc
-UserBashCfg=~/.bashrc
-[ ! -f $UserBashCfg ] && {
-	sysMessage -n "Creating file `readlink -m $UserBashCfg` ... "
-	touch $UserBashCfg
-	[ ! -f $UserBashCfg ] && error "Failed to create file `readlink -m $UserBashCfg`" || okMessage "OK"
-}
-
-# modify ~/.bashrc
-PathStr=~/.aas
-[ -z "`cat $UserBashCfg | grep PATH=`" ] && {
-	sysMessage -n "Adding PATH defintion to bash configuration file $UserBashCfg ... "
-	echo "PATH=\$PATH:$PathStr" > $UserBashCfg
-	[ -z "`cat $UserBashCfg | grep PATH`" ] && error "Failed" || okMessage "OK"
-} || {
-	[ -z "`cat $UserBashCfg | grep $PathStr`" ] && {
-		sysMessage -n "Adding $PathStr to user PATH ... "
-		OldPathStr=`cat $UserBashCfg | grep PATH=`
-		NewPathStr="$OldPathStr:$PathStr"
-		sed "s|$OldPathStr|$NewPathStr|g" -i $UserBashCfg
-		[ -z "`cat $UserBashCfg | grep $PathStr`" ] && error "Failed" || okMessage "OK"
-	}
-}
-
-# create global configuration directory
-[ ! -d $SysConfDir ] && {
-	sysMessage -n "Creating directory $SysConfDir ... "
-	sudo mkdir $SysConfDir
-	[ ! -d $SysConfDir ] && error "Could not create directory $SysConfDir" || okMessage "OK"
-}
-
-# create global configuration file
-[ ! -f $SysConfFile ] && {
-	sysMessage -n "Creating file `readlink -m $SysConfFile` ... "
-	sudo touch $SysConfFile
-	[ ! -f $SysConfFile ] && error "Failed to create file `readlink -m $SysConfFile`" || okMessage "OK"
-}
-
-# create custom scripts directory
-[ ! -d $CustomScriptDir ] && {
-	sysMessage -n "Creating directory $CustomScriptDir ... "
-	sudo mkdir $CustomScriptDir
-	[ ! -d $CustomScriptDir ] && error "Could not create directory $CustomScriptDir" || okMessage "OK"
-}
+# run script to setup aas environment
+$ScriptDir/setupAasEnv.sh
 
 # handle script parameters
 for (( i=1; i<=$#; i++))
