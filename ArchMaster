@@ -37,7 +37,6 @@ do
 			echo -e "  -h, --help  : Print this help"
 			echo -e "  -a, --auto  : Automatic mode - no questions"
 			echo -e "  -nx, --nox  : Manage text mode installation"
-			echo -e "  -t, --tet \"additional parameters\"\n              : Enable special scripts for TET and give additional parameters (optional)"
 			kill -s TERM $TOP_PID
 			;;
 		# automatic mode, no user interaction
@@ -49,13 +48,6 @@ do
 		"-nx"|"--nox")
 			NOX=true
 			sysMessage "Ignoring graphics specific parts of script..."
-			;;
-		# special flag for running TET-specific script
-		"-t"|"--tet")
-			TET=true
-			sysMessage "Enabling extra parts for tet..."
-			j=$((i+1))
-			TET_PARAMS=${!j}
 			;;
 		*)
 			error "No such parameter ${!i}"
@@ -95,13 +87,11 @@ CFG=/etc/systemd/system/rc-local.service
 }
 systemdEnable rc-local
 
-exit
-#[ -z "`cat $PAMLOGINFILE | grep 'pam_mkhomedir'`" ] && {
-#	sysMessage "Enabling automatic creation of home directory..."
-#  echo "session    required   pam_mkhomedir.so skel=/etc/skel umask=0022" >> $PAMLOGINFILE
-#}
-
-[ -n "$TET" ] && {
-	sysMessage "Running TET script..."
-	$BaseDir/TET/scripts/manage-system-tet.sh GO $TET_PARAMS
-}
+# run custom scripts in /etc/aas/custom
+infoMessage "Running custom scripts"
+for dir in $CustomScriptDir/*/; do
+	[ -f "${dir}run.sh" ] && {
+		infoMessage "Running script ${dir}run.sh"
+		#$dir/run.sh
+	}
+done
