@@ -92,6 +92,6 @@ infoMessage "Running custom scripts"
 for dir in $CustomScriptDir/*/; do
 	[ -f "${dir}run.sh" ] && {
 		infoMessage "Running script ${dir}run.sh"
-		#$dir/run.sh
+		$dir/run.sh
 	}
 done
