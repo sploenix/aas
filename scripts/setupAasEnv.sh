@@ -38,6 +38,13 @@ CustomScriptDir=$SysConfDir/custom
 	[ ! -d $CustomScriptDir ] && error "Could not create directory $CustomScriptDir" || okMessage "OK"
 }
 
+# create example directory in custom scripts directory
+[ ! -d $CustomScriptDir/example ] && {
+	infoMessage -n "Creating example directory $CustomScriptDir/example ... "
+	sudo cp -r $CustomScriptDir/example /etc/aas/custom
+	[ ! -d $CustomScriptDir/example ] && error "Could not create directory $CustomScriptDir/example" || okMessage "OK"
+}
+
 # add self update option
 [ -z "`grep 'SELF_UPDATE=true' $SysConfFile`" ] && {
   infoMessage "Adding self update option to AAS config file"
@@ -50,9 +57,19 @@ CustomScriptDir=$SysConfDir/custom
 # create ~/.bashrc
 UserBashCfg=~/.bashrc
 [ ! -f $UserBashCfg ] && {
-	sysMessage -n "Creating file `readlink -m $UserBashCfg` ... "
+	infoMessage -n "Creating file `readlink -m $UserBashCfg` ... "
 	touch $UserBashCfg
 	[ ! -f $UserBashCfg ] && error "Failed to create file `readlink -m $UserBashCfg`" || okMessage "OK"
+}
+
+# create ~/.bash_profile
+# this file is needed for ssh login. if this file doesn't exist the .bashrc will not
+# be read on ssh login
+CFG=`readlink -m ~/.bash_profile`
+[ ! -f $CFG ] && {
+	infoMessage -n "Creating file $CFG ... "
+	echo "[ -f ~/.bashrc ] && . ~/.bashrc" > $CFG
+	[ -f $CFG ] && okMessage "OK" || error "Failed"
 }
 
 # modify ~/.bashrc
