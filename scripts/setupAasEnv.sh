@@ -41,7 +41,7 @@ CustomScriptDir=$SysConfDir/custom
 # create example directory in custom scripts directory
 [ ! -d $CustomScriptDir/example ] && {
 	infoMessage -n "Creating example directory $CustomScriptDir/example ... "
-	sudo cp -r $CustomScriptDir/example /etc/aas/custom
+	sudo cp -r ~/.aas/custom/example $CustomScriptDir
 	[ ! -d $CustomScriptDir/example ] && error "Could not create directory $CustomScriptDir/example" || okMessage "OK"
 }
 
